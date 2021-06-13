@@ -43,6 +43,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Give $(PRODUCT_NAME) permission to save photos</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

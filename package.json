@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "expo-barcode-scanner": "^10.1.2",
+    "expo-image-picker": "^10.1.4",
     "react": "17.0.1",
     "react-native": "0.64.2",
     "react-native-unimodules": "^0.13.3"
