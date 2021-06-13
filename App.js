@@ -81,8 +81,9 @@ export default function App() {
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
       <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <View><Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-      <ResultList data={list} {...{selectedId, setSelectedId}}/>
+      {image && <View>
+        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+      {list.length > 0 ? <ResultList data={list} {...{selectedId, setSelectedId}}/> : <Text style={{color: 'red'}}>No QR Code Found, make sure image has no transparency.</Text>}
       </View>}
     </SafeAreaView>
   );
