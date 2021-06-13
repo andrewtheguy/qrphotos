@@ -1,10 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform, Alert } from 'react-native';
+import { Button, Image, View, Platform, Alert,
+  FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+function ResultList(props){
+
+  const Item = ({ item, onPress, backgroundColor, textColor }) => (
+    <TouchableOpacity onPress={onPress} style={[backgroundColor]}>
+      <Text style={[textColor]} selectable={true}>{item.title}</Text>
+    </TouchableOpacity>
+  );
+  
+    const {selectedId, setSelectedId, data} = props;
+  
+    const renderItem = ({ item }) => {
+      const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+      const color = item.id === selectedId ? 'white' : 'black';
+  
+      return (
+        <Item
+          item={item}
+          onPress={() => setSelectedId(item.id)}
+          backgroundColor={{ backgroundColor }}
+          textColor={{ color }}
+        />
+      );
+    };
+  
+    return (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+        />
+    );
+
+}
+
 export default function App() {
   const [image, setImage] = useState(null);
+  const [list, setList] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -31,18 +70,21 @@ export default function App() {
       setImage(result.uri);
       BarCodeScanner.scanFromURLAsync(result.uri).then(arr => {
         console.log(arr);
+        setList(arr.map((item,index)=>({id: index, title: item.data})));
       }).catch( err =>{
-        console.err(err);
+        console.error(err);
         Alert.alert("failed to recognize qr code");
       })
     }
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
       <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-    </View>
+      {image && <View><Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+      <ResultList data={list} {...{selectedId, setSelectedId}}/>
+      </View>}
+    </SafeAreaView>
   );
 }
 
